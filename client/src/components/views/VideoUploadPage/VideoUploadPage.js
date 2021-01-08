@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Typography, Button, Form, message, Input, Icon } from 'antd';
 import Dropzone from 'react-dropzone';
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -18,7 +19,9 @@ const CatogoryOption = [
     { value: 3, label: "Pets & Animals" }
 ]
 
-function VideoUploadPage() {
+function VideoUploadPage(props) {
+
+    const user = useSelector(state => state.user);
 
     const [VideoTitle, setVideoTitle] = useState("");
     const [Description, setDescription] = useState("");
@@ -43,6 +46,7 @@ function VideoUploadPage() {
     const onCategoryChange = (event) => {
         setCategory(event.currentTarget.value);
     }
+
 
     // onDrop function
     const onDrop = (files) => {
@@ -81,6 +85,36 @@ function VideoUploadPage() {
         })
     }
 
+    // onSubmit function
+    const onSubmit = (event) => {
+        event.preventDefault();
+        
+        // /api/video/uploadVideo에 보내줘야할 정보
+        const variable = {
+            writer: user.userData._id,
+            title: VideoTitle,
+            description: Description,
+            privacy: Private,
+            filePath: FilePath,
+            category: Category,
+            duration: Duration,
+            thumbnail: ThumbnailPath
+        };
+
+        Axios.post('/api/video/uploadVideo', variable)
+        .then(response => {
+            if(response.data.success) {
+                message.success('성공적으로 업로드했습니다.');
+
+                setTimeout(() => {
+                    props.history.push('/');
+                }, 3000);
+            } else {
+                alert('비디오 업로드에 실패했습니다.');
+            }
+        });
+    }
+
     return (
         <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
             {/* Upload Video 타이틀 */}
@@ -89,7 +123,7 @@ function VideoUploadPage() {
             </div>
 
             {/* 업로드 Form Template */}
-            <Form onSubmit>
+            <Form onSubmit={onSubmit}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     
                     {/* Drop Zone */}
@@ -153,7 +187,7 @@ function VideoUploadPage() {
 
                 <br />
                 <br />
-                <Button type="primary" size="large" onClick>
+                <Button type="primary" size="large" onClick={onSubmit}>
                     Submit
                 </Button>
             </Form>

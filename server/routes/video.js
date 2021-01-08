@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// const { Video } = require("../models/Video");
+const { Video } = require("../models/Video");
 
 const { auth } = require("../middleware/auth");
 const multer = require('multer');
@@ -51,6 +51,20 @@ router.post('/uploadfiles', (req, res) => {
             url: res.req.file.path,         // 클라이언트에게 파일 저장 위치경로를 보내줌
             fileName: res.req.file.filename
         });
+    });
+});
+
+// 클라이언트에서 보낸 onSubmit 함수의 request가 index.js를 통해서 오므로 /api/video는 생략
+router.post('/uploadVideo', (req, res) => {
+    // 비디오 정보들을 mongoDB에 저장한다.
+
+    // 클라이언트에서 보낸 variable 모든 정보들이 req.body에 담겨있다.
+    const video = new Video(req.body);
+
+    // 정보들을 mongoose의 메소드를 이용해서 저장
+    video.save((err, doc) => {
+        if(err) return res.json({ success: false, err });
+        res.status(200).json({ success: true });
     });
 });
 
