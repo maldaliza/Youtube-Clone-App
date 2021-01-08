@@ -68,6 +68,18 @@ router.post('/uploadVideo', (req, res) => {
     });
 });
 
+// 랜딩페이지에서 보낸 Axios를 받는 라우터
+router.get('/getVideos', (req, res) => {
+    // 비디오를 DB에서 가져와서 클라이언트에 보낸다.
+
+    Video.find()
+    .populate('writer')     // populate를 해줘야 Video 모델에서 모든 정보들을 가져올 수 있다.
+    .exec((err, videos) => {
+        if(err) return res.status(400).send(err);
+        res.status(200).json({ success: true, videos });
+    });
+});
+
 router.post('/thumbnail', (req, res) => {
     // 썸네일 생성하고 비디오 러닝타임(정보)도 가져오기
 
