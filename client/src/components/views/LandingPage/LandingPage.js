@@ -13,7 +13,7 @@ function LandingPage() {
     const [Video, setVideo] = useState([]);
 
     // mongoDB에서 Video 데이터들을 가져온다.
-    useEffect(() => {
+    useEffect(() => {       // DOM이 로드될 때 무엇을 먼저 할 것인지 => useEffect
         Axios.get('/api/video/getVideos')
         .then(response => {
             if(response.data.success) {
@@ -22,7 +22,7 @@ function LandingPage() {
             } else {
                 alert('비디오 가져오기를 실패했습니다.');
             }
-        })
+        });
     }, []);     // []가 비어있다면 DOM이 업데이트 될때 한번만 렌더링
 
     
@@ -32,14 +32,14 @@ function LandingPage() {
         var seconds = Math.floor(video.duration - minutes * 60);
 
         return <Col lg={6} md={8} xs={24}>
-            <a href={`/video/post/${video._id}`}>
-                <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative' }}>
+                <a href={`/video/${video._id}`}>
                     <img style={{ width: '100%' }} src={`http://localhost:5000/${video.thumbnail}`} />
                     <div className="duration">
                         <span>{minutes} : {seconds}</span>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
             <br />
             <Meta 
                 avatar={
@@ -48,9 +48,9 @@ function LandingPage() {
                 title={video.title}
                 description=""
             />
-            <span>{video.writer.name} </span><br />
+            <span>{video.writer.name}</span><br />
             <span style={{ marginLeft: '3rem' }}>{video.views}</span>
-            - <span>{moment(video.createdAt).format("MMM Do YY")} </span>
+            - <span>{moment(video.createdAt).format("MMM Do YY")}</span>
         </Col>;
     });
 
