@@ -73,20 +73,20 @@ router.get('/getVideos', (req, res) => {
     // 비디오를 DB에서 가져와서 클라이언트에 보낸다.
 
     Video.find()
-    .populate('writer')     // populate를 해줘야 Video 모델에서 모든 정보들을 가져올 수 있다.
-    .exec((err, videos) => {
-        if(err) return res.status(400).send(err);
-        res.status(200).json({ success: true, videos });
+        .populate('writer')     // populate를 해줘야 Video 모델에서 모든 정보들을 가져올 수 있다.
+        .exec((err, videos) => {
+            if(err) return res.status(400).send(err);
+            res.status(200).json({ success: true, videos });
     });
 });
 
 // 해당하는 비디오를 찾아 비디오 디테일 페이지에 보여주는 라우터
-router.get('/getVideoDetail', (req, res) => {
+router.post('/getVideoDetail', (req, res) => {
     Video.findOne({ "_id": req.body.videoId })
-    .populate('writer')
-    .exec((err, VideoDetail) => {
-        if(err) return res.status(400).send(err);
-        return res.status(200).json({ success: true, VideoDetail });
+        .populate('writer')
+        .exec((err, videoDetail) => {
+            if(err) return res.status(400).send(err);
+            return res.status(200).json({ success: true, videoDetail });
     })
 });
 
