@@ -36,6 +36,7 @@ app.use(cookieParser());
 // 클라이언트로부터 처음 request를 받는 곳
 app.use('/api/users', require('./routes/users'));
 app.use('/api/video', require('./routes/video'));
+app.use('/api/subscribe', require('./routes/subscribe'));
 
 
 //use this to show the image you have in node js server to client (react js)
