@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { FaCode } from "react-icons/fa";
 import { Card, Avatar, Col, Typography, Row } from 'antd';
 import Axios from 'axios';
 import moment from 'moment';
@@ -7,14 +6,19 @@ import moment from 'moment';
 const { Title } = Typography;
 const { Meta } = Card;
 
-function LandingPage() {
+function SubscriptionPage() {
 
-    // 가져올 비디오 정보들을 state로 만들어둔다.
     const [Video, setVideo] = useState([]);
 
     // mongoDB에서 Video 데이터들을 가져온다.
-    useEffect(() => {       // DOM이 로드될 때 무엇을 먼저 할 것인지 => useEffect
-        Axios.get('/api/video/getVideos')
+    useEffect(() => {
+
+        const subscriptionVariables = {
+            // 본인의 아이디로 구독하는 사람들을 찾을 수 있고, 비디오를 찾을 수 있다.
+            userFrom: localStorage.getItem('userId')
+        };
+
+        Axios.post('/api/video/getSubscriptionVideos', subscriptionVariables)     // 조건을 가지고 비디오들을 선별해서 가져와야한다.
         .then(response => {
             if(response.data.success) {
                 console.log(response.data);
@@ -23,9 +27,8 @@ function LandingPage() {
                 alert('비디오 가져오기를 실패했습니다.');
             }
         });
-    }, []);     // []가 비어있다면 DOM이 업데이트 될때 한번만 렌더링
+    }, []);
 
-    
     const renderCards = Video.map((video, index) => {
 
         var minutes = Math.floor(video.duration / 60);
@@ -67,4 +70,4 @@ function LandingPage() {
     );
 }
 
-export default LandingPage
+export default SubscriptionPage;
