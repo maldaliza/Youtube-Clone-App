@@ -34,7 +34,7 @@ function ReplyComment(props) {
         });
     };
 
-    const onHandleChange = (event) => {
+    const onHandleChange = () => {
         setOpenReplyComments(!OpenReplyComments);
     };
     
