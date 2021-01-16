@@ -22,9 +22,22 @@ function VideoDetailPage(props) {
                 } else {
                     alert('비디오 정보를 가져오기를 실패했습니다.');
                 }
-            })
+        });
+
+        Axios.post('/api/comment/getComments', variable)
+            .then(response => {
+                if(response.data.success) {
+                    setComments(response.data.comments);
+                } else {
+                    alert('코멘트 정보를 가져오는 것을 실패했습니다.');
+                }
+        });
 
     }, []);
+
+    const refreshFunction = (newComment) => {
+        setComments(Comments.concat(newComment));
+    };
 
     if(VideoDetail.writer) {
 
@@ -35,16 +48,12 @@ function VideoDetailPage(props) {
                 <Col lg={18} xs={24}>
                     <div style={{ width: '100%', padding: '3rem 4rem' }}>
                         
-                        {/* 
-                            ##### Video ##### 
-                        */}
+                        {/* ##### Video ##### */}
                         
                         <video style={{ width: '100%' }} src={`http://localhost:5000/${VideoDetail.filePath}`} controls />
                         
 
-                        {/* 
-                            ##### Video Data & Subscribe ##### 
-                        */}
+                        {/* ##### Video Data & Subscribe ##### */}
 
                         <List.Item
                             actions={[ subscribeButton ]}
@@ -57,11 +66,9 @@ function VideoDetailPage(props) {
                         </List.Item>
     
 
-                        {/* 
-                            ##### Comments #####
-                        */}
+                        {/* ##### Comments #####*/}
 
-                        <Comment postId={videoId} />
+                        <Comment refreshFunction={refreshFunction} commentLists={Comments} postId={videoId} />
                     </div>
                 </Col>
 
