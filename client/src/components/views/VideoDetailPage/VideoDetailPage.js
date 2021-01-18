@@ -57,7 +57,7 @@ function VideoDetailPage(props) {
                         {/* ##### Video Data & Subscribe ##### */}
 
                         <List.Item
-                            actions={[ <LikeDislikes />, subscribeButton ]}
+                            actions={[ <LikeDislikes video userId={localStorage.getItem('userId')} videoId={videoId} />, subscribeButton ]}
                         >
                             <List.Item.Meta
                                 avatar={<Avatar src={VideoDetail.writer.image} />}
